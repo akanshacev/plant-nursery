@@ -25,3 +25,18 @@ export const allplantsAdmin = async(header)=>{
 export const allplantUser = async (header)=>{
     return await commonApi("GET",`${base_url}/allplantsU`,"",header)
 }
+
+// editPlant
+export const editPlant=async(id,data,header)=>{
+    return await commonApi("PUT",`${base_url}/edit-plant/${id}`,data,header)
+}
+
+// delete plant
+export const deletePlant = async(id,header)=>{
+    return await commonApi("DELETE",`${base_url}/deleteplant/${id}`,{},header)
+}
+
+// cart
+export const adtocart = async(data,header)=>{
+    return await commonApi("POST",`${base_url}/addtocart`,data,header)
+}

@@ -39,7 +39,6 @@ function Viewmoread({ aplant }) {
                                     <h6>{aplant.plantMaintanance}</h6>
                                     <h6>{aplant.description}</h6>
                                     <h6>{aplant.quantity}</h6>
-                                    <h6>{aplant.status}</h6>
                                 </div>
                             </Col>
                            

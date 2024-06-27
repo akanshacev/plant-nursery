@@ -7,8 +7,10 @@ import Admindash from './pages/Admindash'
 import Auth from './pages/Auth'
 import Footer from './components/Footer'
 import Wishlist from './components/Wishlist'
+import Addplant from './components/Addplant'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
+import Addtocart from './components/Addtocart'
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
       <Route path='/adash' element={<Admindash/>}/>
       <Route path='/auth' element={<Auth/>}/>
       <Route path='/wish' element={<Wishlist/>}/>
+      <Route path='/cart' element={<Addtocart/>}/>
      </Routes>
      <Footer/>
      <ToastContainer/>

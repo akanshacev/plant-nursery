@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
+// import FloatingLabel from 'react-bootstrap/FloatingLabel';
+// import Form from 'react-bootstrap/Form';
 import server_url from '../services/server_url'
 
 function Userviewmore({ aplant }) {
@@ -39,7 +39,6 @@ function Userviewmore({ aplant }) {
                                     <h6>{aplant.plantMaintanance}</h6>
                                     <h6>{aplant.description}</h6>
                                     {/* <h6>{aplant.quantity}</h6> */}
-                                    <h6>{aplant.status}</h6>
                                 </div>
                             </Col>
                     

@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Addplant from '../components/Addplant'
 import Table from 'react-bootstrap/Table';
 import Viewmoread from '../components/Viewmoread';
 import Edit from '../components/Edit';
-import { allplantsAdmin } from '../services/allApis'
+import { allplantsAdmin, deletePlant } from '../services/allApis'
 import server_url from '../services/server_url'
+import { addPlantResponseContext } from '../contextApi/Contextapi';
+import { editPlantResponseContext } from '../contextApi/Contextapi';
+import { toast } from 'react-toastify';
 
 
 
 function Admindash() {
+
+  const { addPlantResponse, setAddPlantResponse } = useContext(addPlantResponseContext)
+  const { editPlantResponse, setEditPlantResponse } = useContext(editPlantResponseContext)
 
   const [allPlants, setAllPlants] = useState([])
 
@@ -20,10 +26,8 @@ function Admindash() {
     else {
       console.log("Login First");
     }
-  }, [])
+  }, [addPlantResponse, editPlantResponse])
   console.log(allPlants);
-
-
   const getData = async () => {
     const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
     const result = await allplantsAdmin(header)
@@ -31,7 +35,24 @@ function Admindash() {
       setAllPlants(result.data)
     }
     else {
-      console.log(result.response.data);
+      console.log("error");
+      // console.log(result.response.data);
+    }
+  }
+
+  const handleDelete = async (id) => {
+    const token = sessionStorage.getItem('token')
+    const header = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+    const result=await deletePlant(id,header)
+    if(result.status==200){
+      toast.success("Plant Deleted!!")
+      getData()
+    }
+    else{
+      toast.error(result.response.data)
     }
   }
   return (
@@ -56,7 +77,7 @@ function Admindash() {
                 <th></th>
               </tr>
             </thead>
-            
+
             {
               allPlants.length > 0 ?
                 allPlants.map(item => (
@@ -64,7 +85,7 @@ function Admindash() {
                     <tr>
                       {/* <td>1</td> */}
                       <td>{item.plantName}</td>
-                      <td><img src={item.image?`${server_url}/upload/${item.image}`:"https://gardeningtips.in/wp-content/uploads/2020/07/Comp2-10.jpg"} style={{ width: "5rem" }} alt="" /></td>
+                      <td><img src={item.image ? `${server_url}/upload/${item.image}` : "https://gardeningtips.in/wp-content/uploads/2020/07/Comp2-10.jpg"} style={{ width: "5rem" }} alt="" /></td>
                       <td>{item.plantType}</td>
                       <td>{item.plantMRP}</td>
                       <td>
@@ -72,19 +93,19 @@ function Admindash() {
 
                       </td>
                       <td>
-                        <Edit aplant={item}/>
+                        <Edit aplant={item} />
                       </td>
-                      <td><span className='btn'><i className="fa-solid fa-trash" style={{ color: "#df2707" }}></i></span></td>
+                      <td><button className='btn' onClick={()=>{handleDelete(item?._id)}}><i className="fa-solid fa-trash" style={{ color: "#df2707" }}></i></button></td>
                     </tr>
 
                   </tbody>
-               
 
-          ))
-          :
-          <h2>No plants</h2>
-          }
-           </Table>
+
+                ))
+                :
+                <h2>No plants</h2>
+            }
+          </Table>
           <div>
 
           </div>

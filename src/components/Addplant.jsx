@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
-import {addplants} from '../services/allApis'
+import {addplants} from '../services/allApis';
+import { addPlantResponseContext } from '../contextApi/Contextapi';
 
 function Addplant() {
+
+    const {addPlantResponse,setAddPlantResponse}=useContext(addPlantResponseContext)
     const [show, setShow] = useState(false);
     const [preview, setPreview] = useState("")
     const [plant, setPlant] = useState({
-        plantName: "", plantType: "", plantWater: "", plantMRP: "", plantMaintanance: "", description: "", quantity: "", status: "", plantimage: ""
+        plantName: "", plantType: "", plantWater: "", plantMRP: "", plantMaintanance: "", description: "", quantity: "", plantimage: ""
     })
     const [imageStatus, setImageStatus] = useState(false)
 
@@ -30,8 +33,8 @@ function Addplant() {
     }, [plant.plantimage])
 
     const handleAddPlant =async () => {
-        const { plantName, plantType, plantWater, plantMRP, plantMaintanance, description, quantity, status, plantimage } = plant
-        if (!plantName || !plantType || !plantWater || !plantMRP || !plantMaintanance || !description || !quantity || !status || !plantimage) {
+        const { plantName, plantType, plantWater, plantMRP, plantMaintanance, description, quantity, plantimage } = plant
+        if (!plantName || !plantType || !plantWater || !plantMRP || !plantMaintanance || !description || !quantity || !plantimage) {
             toast.warning("Invalid inputs.. Enter Valid input data in every field!!")
         }
         else {
@@ -43,7 +46,6 @@ function Addplant() {
             formData.append("plantMaintanance",plantMaintanance)
             formData.append("description",description)
             formData.append("quantity",quantity)
-            formData.append("status",status)
             formData.append("image",plantimage)
 
 
@@ -56,9 +58,10 @@ function Addplant() {
             if(result.status==200){
                 toast.success("Plant Added Successfully!!")
                 setPlant({
-                    plantName:"",plantType:"",plantWater:"",plantMRP:"",plantMaintanance:"",description:"",quantity:"",status:"",plantimage:""
+                    plantName:"",plantType:"",plantWater:"",plantMRP:"",plantMaintanance:"",description:"",quantity:"",plantimage:""
                 })
                 handleClose()
+                setAddPlantResponse(result)
             }
             else{
                 toast.error(result.response.data)
@@ -118,9 +121,6 @@ function Addplant() {
                             </Col>
                             <FloatingLabel controlId="quantityinp" label="Quantity">
                                 <Form.Control type="number" onChange={(e) => { setPlant({ ...plant, quantity: e.target.value }) }} placeholder="Quantity" />
-                            </FloatingLabel>
-                            <FloatingLabel controlId="statusinp" label="status">
-                                <Form.Control type="boolean" onChange={(e) => { setPlant({ ...plant, status: e.target.value }) }} placeholder="status" />
                             </FloatingLabel>
                         </Row>
                     </div>
