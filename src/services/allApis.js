@@ -37,6 +37,20 @@ export const deletePlant = async(id,header)=>{
 }
 
 // cart
-export const adtocart = async(data,header)=>{
-    return await commonApi("POST",`${base_url}/addtocart`,data,header)
+export const adtocart = async(id,header)=>{
+    console.log(id,header,"cart api");
+    return await commonApi("POST",`${base_url}/addtocart/${id}`,"",header)
+}
+// getcart
+export const getcartitems = async(header)=>{
+    return await commonApi("GET",`${base_url}/getcart`,"",header)
+}
+// wishlist
+export const addtowishlistApi = async(data,header)=>{
+    return await commonApi("POST",`${base_url}/addtowishlist/${data}`,"",header)
+}
+
+// getwishlist
+export const getwishlist = async(header)=>{
+    return await commonApi("GET",`${base_url}/getwish`,"",header)
 }

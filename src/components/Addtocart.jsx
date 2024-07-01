@@ -1,17 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
+import server_url from '../services/server_url'
 import { Table } from 'react-bootstrap'
+import { getcartitems } from '../services/allApis'
+import Order from './Order'
 
-import { adtocart } from '../services/allApis'
 
 function Addtocart() {
 
-    const getData = async () => {
-        const header = {
-            "Authorization": `Bearer ${sessionStorage.getItem('token')}`
+    const [cartItem, setcartItem] = useState([])
+    useEffect(() => {
+        if (sessionStorage.getItem('token')) {
+            getData()
         }
-        const result = await adtocart(plant)
+        else {
+            console.log("Login First");
+        }
+    }, [])
+    console.log(cartItem);
+
+    const getData = async () => {
+        try {
+            const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
+            const result = await getcartitems(header)
+            if (result.status == 200) {
+                setcartItem(result.data.plants)
+                console.log(result.data,"result")
+            }
+            else {
+                console.log(result.response.data)
+            }
+        }
+        catch (error) {
+            console.log("Error fetching cart items:", error);
+        }
+
     }
+    // const getData = async () => {
+    //     const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
+    //     const result = await allplantsAdmin(header)
+    //     if (result.status == 200) {
+    //       setAllPlants(result.data)
+    //     }
+    //     else {
+    //       console.log("error");
+    //       // console.log(result.response.data);
+    //     }
+    //   }
     return (
         <>
             <Header></Header>
@@ -25,6 +60,7 @@ function Addtocart() {
                 </div>
             </header>
             <div className='ms-3 mt-4 mb-5 me-3'>
+
                 <Table>
                     <thead>
                         <tr>
@@ -37,27 +73,41 @@ function Addtocart() {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr >
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button className="btn">+</button>
-                            <input type="text" className="form-control" />
-                            <button className="btn">-</button>
-                        </td>
-                        <td></td>
-                        <td>
-                            <button className="btn">
-                            <i className="fa-solid fa-trash" style={{color: "ed0c0c"}}></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </Table >
-                
+                    {
+                        cartItem.length > 0 ?
+                            cartItem.map(item => (
+                                <tbody>
+                                    <tr key={item.plantId._id}>
+                                        <td>{item.plantId.plantName}</td>
+                                        <td>{item.plantId.plantMRP}</td>
+                                        <td><img src={item.plantId.image ? `${server_url}/upload/${item.plantId.image}` : "https://gardeningtips.in/wp-content/uploads/2020/07/Comp2-10.jpg"} style={{ width: "5rem" }} alt="" /></td>
+                                        <td>
+                                            <button className="btn">+</button>
+                                            {/* <input type="text"  className="form-control" /> */}
+                                            {item.quantity}
+                                            <button className="btn">-</button>
+                                        </td>
+                                        <td>{item.plantId.plantMRP * item.quantity}</td>
+                                        <td>
+                                            <button className="btn">
+                                                <i className="fa-solid fa-trash" style={{ color: "ed0c0c" }}></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            ))
+                            :
+                            <tr>
+                                <td colSpan="6" className='text-danger'>No Cart Items...</td>
+                            </tr>
+                    }
+
+                </Table >
+
             </div >
+            <div className='mt-3'>
+                <Order />
+            </div>
         </>
     )
 }

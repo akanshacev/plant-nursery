@@ -1,22 +1,22 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import server_url from '../services/server_url'
+import { Row, Col } from 'react-bootstrap';
 
-import { Row,Col } from 'react-bootstrap';
-
-function WishCard() {
+function WishCard({ aplant }) {
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-  return (
-    <>
-        <Card style={{ width: '18rem' }}>
-                <Card.Img onClick={handleShow} variant="top" src="https://www.axialent.com/wp-content/uploads/2018/03/AdobeStock_42639258.jpeg" />
+    return (
+        <>
+            <Card style={{ width: '18rem' }}>
+                <Card.Img onClick={handleShow} variant="top" src={aplant.image ? `${server_url}/upload/${aplant.image}` : "https://www.axialent.com/wp-content/uploads/2018/03/AdobeStock_42639258.jpeg"} height="250px" />
                 <Card.Body>
-                    <Card.Title>Palnt title</Card.Title>
+                    <Card.Title>{aplant.plantName}</Card.Title>
                 </Card.Body>
             </Card>
 
@@ -27,35 +27,32 @@ function WishCard() {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Plant title</Modal.Title>
+                    <Modal.Title>{aplant.plantName}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
                         <Col>
-                            <img className='img-fluid' src="https://www.axialent.com/wp-content/uploads/2018/03/AdobeStock_42639258.jpeg" alt="img" />
+                            <img className='img-fluid' src={aplant.image ? `${server_url}/upload/${aplant.image}` : "https://www.axialent.com/wp-content/uploads/2018/03/AdobeStock_42639258.jpeg"} heihnt="1800px" alt="img" />
                         </Col>
                         <Col>
-                            <h4>title of plats</h4>
-                            {/* <p>{project?.overview}</p>
-                            <h6>{project?.languages}</h6> */}
-                            {/* <div className='mt-3 p-3 d-flex justify-content-between'>
-                                <a href={project.github}>
-                                    <i class="fa-brands fa-github fa-xl"></i>
-                                </a>
-                                <a href={project.demo}>
-                                <i class="fa-solid fa-link fa-xl"></i>
-                                </a>
-                            </div> */}
+                            <h4>{aplant.plantName}</h4>
+                            <h4>{aplant.plantMRP}</h4>
+
                         </Col>
                         <Button variant="info" className='mt-2'>
-                                Add to cart
-                            </Button>
+                            Add to cart
+                        </Button>
+                        <div className='text-center'>
+                            <span className='btn'>
+                            <i className="fa-solid fa-heart-circle-minus" style={{color:" #e10914"}}></i>
+                            </span>
+                        </div>
                     </Row>
                 </Modal.Body>
-              
+
             </Modal>
-    </>
-  )
+        </>
+    )
 }
 
 export default WishCard
