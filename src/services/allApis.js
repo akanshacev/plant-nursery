@@ -45,6 +45,10 @@ export const adtocart = async(id,header)=>{
 export const getcartitems = async(header)=>{
     return await commonApi("GET",`${base_url}/getcart`,"",header)
 }
+// remove cart item
+export const removeCartitem = async(id,header)=>{
+    return await commonApi("put",`${base_url}/rmcartitem/${id}`,"",header)
+}
 // wishlist
 export const addtowishlistApi = async(data,header)=>{
     return await commonApi("POST",`${base_url}/addtowishlist/${data}`,"",header)
@@ -53,4 +57,19 @@ export const addtowishlistApi = async(data,header)=>{
 // getwishlist
 export const getwishlist = async(header)=>{
     return await commonApi("GET",`${base_url}/getwish`,"",header)
+}
+
+// remove wishlist items
+export const removeWishlist = async(id,header)=>{
+return await commonApi("PUT",`${base_url}/rmwish/${id}`,"",header)
+}
+
+// Place Order
+export const placeOrder = async(data,header)=>{
+    return await commonApi("post",`${base_url}/placeOrder/`,data,header)
+}
+
+// getorder details
+export const getorder = async(header)=>{
+    return await commonApi("GET",`${base_url}/getorder`,"",header)
 }

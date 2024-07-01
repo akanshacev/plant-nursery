@@ -3,6 +3,7 @@ import Header from './Header'
 import server_url from '../services/server_url'
 import { Table } from 'react-bootstrap'
 import { getcartitems } from '../services/allApis'
+import { removeCartitem } from '../services/allApis'
 import Order from './Order'
 
 
@@ -18,10 +19,10 @@ function Addtocart() {
         }
     }, [])
     console.log(cartItem);
+    const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
 
     const getData = async () => {
         try {
-            const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
             const result = await getcartitems(header)
             if (result.status == 200) {
                 setcartItem(result.data.plants)
@@ -35,6 +36,16 @@ function Addtocart() {
             console.log("Error fetching cart items:", error);
         }
 
+    }
+
+    const deleteFromCart = (id)=>{
+        removeCartitem(id,header).then((res)=>{
+            if(res.status == 200){
+                setcartItem((prevItems) => prevItems.filter(item => item.plantId._id !== id));
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
     // const getData = async () => {
     //     const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
@@ -82,14 +93,11 @@ function Addtocart() {
                                         <td>{item.plantId.plantMRP}</td>
                                         <td><img src={item.plantId.image ? `${server_url}/upload/${item.plantId.image}` : "https://gardeningtips.in/wp-content/uploads/2020/07/Comp2-10.jpg"} style={{ width: "5rem" }} alt="" /></td>
                                         <td>
-                                            <button className="btn">+</button>
-                                            {/* <input type="text"  className="form-control" /> */}
                                             {item.quantity}
-                                            <button className="btn">-</button>
                                         </td>
                                         <td>{item.plantId.plantMRP * item.quantity}</td>
                                         <td>
-                                            <button className="btn">
+                                            <button className="btn" onClick={()=>{deleteFromCart(item.plantId._id)}}>
                                                 <i className="fa-solid fa-trash" style={{ color: "ed0c0c" }}></i>
                                             </button>
                                         </td>

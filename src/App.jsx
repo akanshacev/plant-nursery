@@ -11,6 +11,7 @@ import Addplant from './components/Addplant'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
 import Addtocart from './components/Addtocart'
+import Orderlist from './pages/Orderlist'
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path='/auth' element={<Auth/>}/>
       <Route path='/wish' element={<Wishlist/>}/>
       <Route path='/cart' element={<Addtocart/>}/>
+      <Route path='/orderlist' element={<Orderlist/>}/>
      </Routes>
      <Footer/>
      <ToastContainer/>

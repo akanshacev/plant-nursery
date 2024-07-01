@@ -9,6 +9,7 @@ import server_url from '../services/server_url'
 import { addPlantResponseContext } from '../contextApi/Contextapi';
 import { editPlantResponseContext } from '../contextApi/Contextapi';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 
 
@@ -62,7 +63,12 @@ function Admindash() {
         <h2 className='text-center text-warning'>Welcome </h2>
         <h3 className='text-success'>Plant List</h3>
         <div className='border border-3 p-4'>
-          <div><Addplant /></div>
+          <div className='d-flex justify-content-between'>
+            <Addplant />
+            <Link to={'/orderlist'}>
+            <button className='btn btn-success mb-4'>View Orders</button>
+            </Link>
+          </div>
 
           <Table striped bordered hover>
             <thead>

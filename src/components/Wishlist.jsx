@@ -31,6 +31,10 @@ function Wishlist() {
         }
        
     }
+
+    const removeFromWishlist=(id)=>{
+        setWishlistItems((prevItems)=>prevItems.filter(item=>item.plantId._id!==id))
+    }
     return (
         <>
             <header className="bg-success py-5 mb-5">
@@ -46,7 +50,7 @@ function Wishlist() {
                 {
                     wishlistItems.length>0?
                     wishlistItems.map(item=>(
-                        <WishCard aplant={item.plantId}/>
+                        <WishCard key={item.plantId._id} aplant={item.plantId} header={{ "Authorization": `Bearer ${sessionStorage.getItem('token')}` }} onRemove={removeFromWishlist}/>
                     ))
                     :
                     <h2>No Wishlist Items....</h2>
