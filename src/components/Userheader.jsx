@@ -3,11 +3,27 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
-import Wishlist from './Wishlist';
+import { useNavigate } from 'react-router-dom';
+import { TokenAuthContext } from '../contextApi/AuthContext';
+import { useContext } from 'react';
+// import Wishlist from './Wishlist';
 
 // import Badge from 'react-bootstrap/Badge';
 
 function Userheader() {
+  const {authStatus,setAuthStatus}=useContext(TokenAuthContext)
+
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('username')
+    navigate('/')
+    setAuthStatus(false)
+
+
+  }
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -39,7 +55,7 @@ function Userheader() {
           <div className='ms-3'>
             {
               !status &&
-              <button className='btn btn-outline-danger'>
+              <button className='btn btn-outline-danger' onClick={handleLogout}>
                 <i class="fa-solid fa-right-from-bracket ms-2"></i>
                 Logout
               </button>

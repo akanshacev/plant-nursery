@@ -12,21 +12,24 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
 import Addtocart from './components/Addtocart'
 import Orderlist from './pages/Orderlist'
+import { TokenAuthContext } from './contextApi/AuthContext'
+import { useContext } from 'react'
 
 
 function App() {
+  const {authStatus,setAuthStatus}=useContext(TokenAuthContext)
   
 
   return (
     <>
      <Routes>
       <Route path='/' element={<Landing/>}/>
-      <Route path='/udash' element={<Userdash/>}/>
-      <Route path='/adash' element={<Admindash/>}/>
+      <Route path='/udash' element={authStatus?<Userdash/>:<Landing/>}/>
+      <Route path='/adash' element={authStatus?<Admindash/>:<Landing/>}/>
       <Route path='/auth' element={<Auth/>}/>
-      <Route path='/wish' element={<Wishlist/>}/>
-      <Route path='/cart' element={<Addtocart/>}/>
-      <Route path='/orderlist' element={<Orderlist/>}/>
+      <Route path='/wish' element={authStatus?<Wishlist/>:<Landing/>}/>
+      <Route path='/cart' element={authStatus?<Addtocart/>:<Landing/>}/>
+      <Route path='/orderlist' element={authStatus?<Orderlist/>:<Landing/>}/>
      </Routes>
      <Footer/>
      <ToastContainer/>

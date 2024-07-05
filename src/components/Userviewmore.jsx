@@ -33,6 +33,7 @@ function Userviewmore({ aplant }) {
         addtowishlistApi(aplant._id,reqHeader).then((res)=>{
             console.log(res);
             toast.success(res.data ? res.data : res.response.data)
+            handleClose()
         }).catch((error)=>{
             console.log(error);
             toast.error(error.message)

@@ -5,8 +5,13 @@ import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 import { userRegister,userLogin } from '../services/allApis';
 import { useNavigate } from 'react-router-dom';
+import { TokenAuthContext } from '../contextApi/AuthContext';
+import { useContext } from 'react';
 
 function Auth() {
+
+  const {authStatus,setAuthStatus}=useContext(TokenAuthContext)
+
   const [status, setStatus] = useState(true)
   const [data, setData] = useState({
     username: "", password: "", email: ""
@@ -50,6 +55,7 @@ function Auth() {
       sessionStorage.setItem("token",result.data.token)
       sessionStorage.setItem("username",result.data.user)
       toast.success("Login Successfully!!")
+      setAuthStatus(true)
       if(email=="admin@gmail.com" && password==="123"){
         navigate('/adash')
       }

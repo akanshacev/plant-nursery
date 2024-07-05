@@ -14,10 +14,14 @@ function Orderlist() {
         else {
             console.log("Login First");
         }
-    })
+    }, [])
+    console.log(oItems);
+    const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
+
     const getData = async () => {
         try {
-            const result = await getorder(Header)
+
+            const result = await getorder(header)
             if (result.status == 200) {
                 setOItems(result.data)
                 console.log("result", result.data);
@@ -31,25 +35,48 @@ function Orderlist() {
         }
     }
 
-    
+
     return (
         <>
             <Header />
-            
+
             <div>
-                <Table className='table'>
+                <Table className='table table-borderd'>
                     <thead>
                         <tr>
                             <th>Address</th>
                             <th>Plant Details</th>
+                            <th>Date And Time</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
+                    {
+                        oItems.length > 0 ?
+                            oItems.map((order, orderIndex)=> (
+                                <tbody key={orderIndex}>
+                                    <tr>
+                                        <td>
+                                        {order.address.userName}, {order.address.houseName}, {order.address.homeTown}, {order.address.post}, {order.address.pinCode}, {order.address.mobileNumber}
+                                        </td>
+                                        <td>
+                                        {order.orderItems.map((item, itemIndex) => (
+                                            <div key={itemIndex}>
+                                                <p>Plant Name: {item.plantId.plantName}</p>
+                                                <p>Type: {item.plantId.plantType}</p>
+                                                <p>Watering: {item.plantId.plantWater}</p>
+                                                <p>Maintenance: {item.plantId.plantMaintanance}</p>
+                                                <p>Description: {item.plantId.description}</p>
+                                                <p>Quantity: {item.quantity}</p>
+                                            </div>
+                                        ))}
+                                        </td>
+                                        <td>{order.createAt}</td>
+                                    </tr>
+                                </tbody>
+                            ))
+                            :
+                            <h2>No orders</h2>
+                    }
+
                 </Table>
             </div>
         </>

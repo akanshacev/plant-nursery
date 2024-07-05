@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import server_url from '../services/server_url'
 import { Table } from 'react-bootstrap'
-import { getcartitems } from '../services/allApis'
+import { getcartitems, updateCartQuantity } from '../services/allApis'
 import { removeCartitem } from '../services/allApis'
 import Order from './Order'
 
@@ -42,6 +42,16 @@ function Addtocart() {
         removeCartitem(id,header).then((res)=>{
             if(res.status == 200){
                 setcartItem((prevItems) => prevItems.filter(item => item.plantId._id !== id));
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+
+    const updateQuantity =async(id,quantity)=>{
+        await updateCartQuantity(id,quantity,header).then((res)=>{
+            if(res.status==200){
+                setcartItem((prevItems)=>prevItems.map(item=>item.plantId._id === id?{...item,quantity}:item))
             }
         }).catch((err)=>{
             console.log(err);
@@ -93,7 +103,9 @@ function Addtocart() {
                                         <td>{item.plantId.plantMRP}</td>
                                         <td><img src={item.plantId.image ? `${server_url}/upload/${item.plantId.image}` : "https://gardeningtips.in/wp-content/uploads/2020/07/Comp2-10.jpg"} style={{ width: "5rem" }} alt="" /></td>
                                         <td>
-                                            {item.quantity}
+                                            <button className='btn' onClick={()=>updateQuantity(item.plantId._id,item.quantity+1)}>+</button><br />
+                                            {item.quantity} <br />
+                                            <button className='btn' onClick={()=>updateQuantity(item.plantId._id,item.quantity-1)}>1</button>
                                         </td>
                                         <td>{item.plantId.plantMRP * item.quantity}</td>
                                         <td>
